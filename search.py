@@ -2,6 +2,7 @@ from queue import PriorityQueue
 # from gameSetup import * 
 import numpy as np
 import copy
+import heapq
 import math
 
 #solution
@@ -141,23 +142,28 @@ def search(game, misplaced, euclidean, manhattan):
     maxQueue = 0
     LEVEL = 0
     node = Node(0, game, 0)
+    
     frontier = dict()
-    # frontier[node.hash] = (node.cost, node.state, node.euclidean, node.level, node.hash)
     frontier[node.hash] = node
+
     explored = set()
     while True:
         if len(frontier) == 0:
             print("FAILED")
-            return gameState, LEVEL, maxQueue
+            return game, LEVEL, maxQueue
         if len(frontier) > maxQueue:
             maxQueue = len(frontier)
+
         # currNode = list(sortDict.values())[0] #gives first value of dict
         # currNode = sortDict[0][1] #gives first value of dict
+
+        ### -------dict Queue----------
         currNode = list(frontier.values())[0]
         for key in frontier.items():
              if key[1].cost < currNode.cost:
                  currNode = key[1]
         frontier.pop(currNode.hash, None)
+
         LEVEL += 1
         printExpand(currNode.cost, currNode.state, currNode.euclidean, currNode.level)
         results = goalTest(currNode.state)
